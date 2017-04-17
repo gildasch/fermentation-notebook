@@ -1,5 +1,5 @@
 methods:
-  - name: Levain solide
+  Levain solide:
     steps:
       - name: Création
       - name: Levage

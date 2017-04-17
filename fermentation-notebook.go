@@ -15,13 +15,14 @@ import (
 )
 
 type Batches struct {
-	Batches []Batch
+	Batches []*Batch
 }
 
 type Batch struct {
-	Name    string
-	Type    string
-	History []Event
+	Name      string
+	Type      string
+	History   []Event
+	NextEvent time.Time
 }
 
 type Event struct {
@@ -31,12 +32,13 @@ type Event struct {
 }
 
 type Methods struct {
-	Methods []Method
+	Methods map[string]*Method
 }
 
 type Method struct {
-	Name  string
-	Steps []Step
+	Name      string
+	Steps     []Step
+	Durations map[string]time.Duration
 }
 
 type Step struct {
@@ -45,19 +47,19 @@ type Step struct {
 }
 
 func main() {
-	bs, err := readBatches("batches.yaml")
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	// fmt.Println(bs)
-
 	ms, err := readMethods("methods.yaml")
 	if err != nil {
 		fmt.Println(err)
 	}
 
 	// fmt.Println(ms)
+
+	bs, err := readBatches("batches.yaml", ms)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	// fmt.Println(bs)
 
 	err = serve(bs, ms)
 	fmt.Println(err)
@@ -68,6 +70,17 @@ func serve(bs Batches, ms Methods) error {
 		t, err := template.New("batches.html").Funcs(template.FuncMap{
 			"nl2br": func(s string) template.HTML {
 				return template.HTML(strings.Replace(s, "\n", "<br />\n", -1))
+			},
+			"until": func(t time.Time) time.Duration {
+				ret := time.Until(t)
+				if ret > 2*time.Hour {
+					ret -= ret % time.Hour
+				} else if ret > 2*time.Minute {
+					ret -= ret % time.Minute
+				} else {
+					ret -= ret % time.Second
+				}
+				return ret
 			}}).ParseFiles("tmpl/batches.html")
 		if err != nil {
 			fmt.Println(err)
@@ -91,7 +104,7 @@ func serve(bs Batches, ms Methods) error {
 	return http.ListenAndServe(":"+port, nil)
 }
 
-func readBatches(input string) (bs Batches, err error) {
+func readBatches(input string, ms Methods) (bs Batches, err error) {
 	bf, err := os.Open(input)
 	if err != nil {
 		return
@@ -102,6 +115,21 @@ func readBatches(input string) (bs Batches, err error) {
 	}
 
 	err = yaml.Unmarshal(bb, &bs)
+	if err != nil || len(bs.Batches) == 0 {
+		return
+	}
+
+	for _, b := range bs.Batches {
+		lastEvent := b.History[len(b.History)-1]
+		lastTime, err := time.Parse("2006-01-02 15:04", lastEvent.Date)
+		fmt.Println(lastEvent.Date, lastTime, err)
+		if err != nil {
+			continue
+		}
+		b.NextEvent = lastTime.Add(ms.Methods[b.Type].Durations[lastEvent.Name])
+		fmt.Println(lastTime, "+", ms.Methods[b.Type].Durations[lastEvent.Name], b.NextEvent)
+	}
+
 	return
 }
 
@@ -116,5 +144,19 @@ func readMethods(input string) (ms Methods, err error) {
 	}
 
 	err = yaml.Unmarshal(mb, &ms)
+	if err != nil {
+		return
+	}
+
+	for _, m := range ms.Methods {
+		m.Durations = make(map[string]time.Duration)
+		for _, s := range m.Steps {
+			// Only the first
+			if _, ok := m.Durations[s.Name]; !ok {
+				m.Durations[s.Name] = s.Duration
+			}
+		}
+	}
+
 	return
 }

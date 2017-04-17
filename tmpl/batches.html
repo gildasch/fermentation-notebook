@@ -12,6 +12,7 @@
     {{ range $b := .Batches.Batches }}
     <p>
       <h3>{{ $b.Name }}: {{ $b.Type }}</h3>
+      <p><strong>Next step: {{ until $b.NextEvent }}</strong></p>
       <ul>
         {{ range $e := $b.History }}
         <li>
