@@ -1,0 +1,15 @@
+batches:
+  - name: L1
+    type: Levain solide
+    history:
+      - name: Création
+        date: 2017-04-17 16:00
+        comment: |
+          300g farine, T65 à la meule de pierre, bio
+          150g eau cristaline, 50% temp. ambiante, 50% 65 deg.
+          15g miel, non bio
+
+          Sources: Chritophe (Levain, Le vin), Le grand manuel du
+          boulanger
+      - name: Levage
+        date: 2017-04-17 16:01
