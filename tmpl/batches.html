@@ -3,17 +3,33 @@
   <head>
     <meta charset="UTF-8">
     <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <link rel="stylesheet" href="style.css" />
     <title>Batches</title>
   </head>
   <body>
-    {{ range $b := .Batches }}
+    <h1>Fermentation Notebook</h1>
+    <h2>Batches</h3>
+    {{ range $b := .Batches.Batches }}
     <p>
-      <h2>{{ $b.Name }}: {{ $b.Type }}</h2>
+      <h3>{{ $b.Name }}: {{ $b.Type }}</h3>
       <ul>
         {{ range $e := $b.History }}
         <li>
           {{ $e.Date }}: {{ $e.Name }}
           <p>{{ nl2br $e.Comment }}</p>
+        </li>
+        {{ end }}
+      </ul>
+    </p>
+    {{ end }}
+    <h2>Methods</h2>
+    {{ range $m := .Methods.Methods }}
+    <p>
+      <h3>{{ $m.Name }}</h3>
+      <ul>
+        {{ range $s := $m.Steps }}
+        <li>
+          {{ $s.Name }}: {{ $s.Duration }}
         </li>
         {{ end }}
       </ul>

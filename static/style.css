@@ -1,0 +1,28 @@
+@font-face {
+  font-family: 'hack';
+  src: url('hack.ttf');
+}
+
+body {
+    font-family: 'hack', monospace;
+}
+
+h1, h2, h3, h4, p, ul {
+    max-width: 1100px;
+    margin:auto;
+}
+
+h1 {
+    text-align: center;
+    border-bottom: 2px solid black;
+    padding-top: 25px;
+    padding-bottom: 25px;
+    margin-bottom: 25px;
+}
+
+h2 {
+    text-align:center;
+    text-decoration:underline;
+    margin-bottom:5px;
+    margin-top:15px;
+}
