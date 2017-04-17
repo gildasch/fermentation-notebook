@@ -12,11 +12,11 @@
     {{ range $b := .Batches.Batches }}
     <p>
       <h3>{{ $b.Name }}: {{ $b.Type }}</h3>
-      <p><strong>Next step: {{ until $b.NextEvent }}</strong></p>
+      <p>Next step: {{ date $b.NextEvent }} (in {{ until $b.NextEvent }})</p>
       <ul>
         {{ range $e := $b.History }}
         <li>
-          {{ $e.Date }}: {{ $e.Name }}
+          {{ $e.Date }}, {{ $e.Name }}
           <p>{{ nl2br $e.Comment }}</p>
         </li>
         {{ end }}
@@ -24,9 +24,9 @@
     </p>
     {{ end }}
     <h2>Methods</h2>
-    {{ range $m := .Methods.Methods }}
+    {{ range $n, $m := .Methods.Methods }}
     <p>
-      <h3>{{ $m.Name }}</h3>
+      <h3>{{ $n }}</h3>
       <ul>
         {{ range $s := $m.Steps }}
         <li>

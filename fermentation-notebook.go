@@ -71,7 +71,10 @@ func serve(bs Batches, ms Methods) error {
 			"nl2br": func(s string) template.HTML {
 				return template.HTML(strings.Replace(s, "\n", "<br />\n", -1))
 			},
-			"until": func(t time.Time) time.Duration {
+			"date": func(t time.Time) string {
+				return t.Format("2006-01-02 15:04")
+			},
+			"until": func(t time.Time) string {
 				ret := time.Until(t)
 				if ret > 2*time.Hour {
 					ret -= ret % time.Hour
@@ -80,7 +83,7 @@ func serve(bs Batches, ms Methods) error {
 				} else {
 					ret -= ret % time.Second
 				}
-				return ret
+				return strings.Replace(strings.Replace(ret.String(), "0s", "", 1), "0m", "", 1)
 			}}).ParseFiles("tmpl/batches.html")
 		if err != nil {
 			fmt.Println(err)
