@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"sort"
 	"strings"
 	"time"
 
@@ -16,6 +17,12 @@ import (
 
 type Batches struct {
 	Batches []*Batch
+}
+
+func (b Batches) Len() int      { return len(b.Batches) }
+func (b Batches) Swap(i, j int) { b.Batches[i], b.Batches[j] = b.Batches[j], b.Batches[i] }
+func (b Batches) Less(i, j int) bool {
+	return b.Batches[i].NextEvent.Before(b.Batches[j].NextEvent)
 }
 
 type Batch struct {
@@ -132,6 +139,8 @@ func readBatches(input string, ms Methods) (bs Batches, err error) {
 		b.NextEvent = lastTime.Add(ms.Methods[b.Type].Durations[lastEvent.Name])
 		fmt.Println(lastTime, "+", ms.Methods[b.Type].Durations[lastEvent.Name], b.NextEvent)
 	}
+
+	sort.Sort(bs)
 
 	return
 }
