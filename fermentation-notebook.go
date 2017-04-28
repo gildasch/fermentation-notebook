@@ -16,21 +16,20 @@ import (
 func main() {
 	if len(os.Args) < 3 {
 		fmt.Println("Usage:", os.Args[0], "path/to/batches.yaml", "path/to/methods.yaml")
+		return
 	}
 
 	ms, err := model.ReadMethods(os.Args[2])
 	if err != nil {
 		fmt.Println(err)
+		return
 	}
-
-	// fmt.Println(ms)
 
 	bs, err := model.ReadBatches(os.Args[1], ms)
 	if err != nil {
 		fmt.Println(err)
+		return
 	}
-
-	// fmt.Println(bs)
 
 	err = serve(bs, ms)
 	fmt.Println(err)
