@@ -1,8 +1,6 @@
 package model
 
 import (
-	"io/ioutil"
-	"os"
 	"time"
 
 	yaml "gopkg.in/yaml.v2"
@@ -20,20 +18,11 @@ type Method struct {
 
 type Step struct {
 	Name     string
-	Duration time.Duration
+	Duration string
 }
 
-func ReadMethods(input string) (ms Methods, err error) {
-	mf, err := os.Open(input)
-	if err != nil {
-		return
-	}
-	mb, err := ioutil.ReadAll(mf)
-	if err != nil {
-		return
-	}
-
-	err = yaml.Unmarshal(mb, &ms)
+func ParseMethods(input []byte) (ms Methods, err error) {
+	err = yaml.Unmarshal(input, &ms)
 	if err != nil {
 		return
 	}
@@ -43,7 +32,7 @@ func ReadMethods(input string) (ms Methods, err error) {
 		for _, s := range m.Steps {
 			// Only the first
 			if _, ok := m.Durations[s.Name]; !ok {
-				m.Durations[s.Name] = s.Duration
+				m.Durations[s.Name], _ = time.ParseDuration(s.Duration)
 			}
 		}
 	}

@@ -2,8 +2,6 @@ package model
 
 import (
 	"fmt"
-	"io/ioutil"
-	"os"
 	"sort"
 	"time"
 
@@ -33,17 +31,8 @@ type Event struct {
 	Comment string
 }
 
-func ReadBatches(input string, ms Methods) (bs Batches, err error) {
-	bf, err := os.Open(input)
-	if err != nil {
-		return
-	}
-	bb, err := ioutil.ReadAll(bf)
-	if err != nil {
-		return
-	}
-
-	err = yaml.Unmarshal(bb, &bs)
+func ParseBatches(input []byte, ms Methods) (bs Batches, err error) {
+	err = yaml.Unmarshal(input, &bs)
 	if err != nil || len(bs.Batches) == 0 {
 		return
 	}

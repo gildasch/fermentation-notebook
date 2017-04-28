@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"html/template"
+	"io/ioutil"
 	"net/http"
 	"os"
 	"strings"
@@ -19,13 +20,13 @@ func main() {
 		return
 	}
 
-	ms, err := model.ReadMethods(os.Args[2])
+	ms, err := readMethods(os.Args[2])
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	bs, err := model.ReadBatches(os.Args[1], ms)
+	bs, err := readBatches(os.Args[1], ms)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -33,6 +34,42 @@ func main() {
 
 	err = serve(bs, ms)
 	fmt.Println(err)
+}
+
+func readMethods(input string) (ms model.Methods, err error) {
+	mf, err := os.Open(input)
+	if err != nil {
+		return
+	}
+	mb, err := ioutil.ReadAll(mf)
+	if err != nil {
+		return
+	}
+
+	ms, err = model.ParseMethods(mb)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	return
+}
+
+func readBatches(input string, ms model.Methods) (bs model.Batches, err error) {
+	bf, err := os.Open(input)
+	if err != nil {
+		return
+	}
+	bb, err := ioutil.ReadAll(bf)
+	if err != nil {
+		return
+	}
+
+	bs, err = model.ParseBatches(bb, ms)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	return
 }
 
 func serve(bs model.Batches, ms model.Methods) error {
