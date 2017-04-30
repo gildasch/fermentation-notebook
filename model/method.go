@@ -1,6 +1,7 @@
 package model
 
 import (
+	"errors"
 	"time"
 
 	yaml "gopkg.in/yaml.v2"
@@ -30,9 +31,16 @@ func ParseMethods(input []byte) (ms Methods, err error) {
 	for _, m := range ms.Methods {
 		m.Durations = make(map[string]time.Duration)
 		for _, s := range m.Steps {
+			if s.Duration == "" {
+				continue
+			}
 			// Only the first
 			if _, ok := m.Durations[s.Name]; !ok {
-				m.Durations[s.Name], _ = time.ParseDuration(s.Duration)
+				m.Durations[s.Name], err = ParseDuration(s.Duration)
+				if err != nil {
+					err = errors.New("Error parsing duration <" + s.Duration + ">: " + err.Error())
+					return
+				}
 			}
 		}
 	}

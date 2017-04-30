@@ -22,13 +22,13 @@ func main() {
 
 	ms, err := readMethods(os.Args[2])
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("Error reading methods:", err)
 		return
 	}
 
 	bs, err := readBatches(os.Args[1], ms)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("Error reading batches:", err)
 		return
 	}
 
@@ -48,7 +48,6 @@ func readMethods(input string) (ms model.Methods, err error) {
 
 	ms, err = model.ParseMethods(mb)
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 	return
@@ -66,7 +65,6 @@ func readBatches(input string, ms model.Methods) (bs model.Batches, err error) {
 
 	bs, err = model.ParseBatches(bb, ms)
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 	return
