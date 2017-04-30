@@ -80,15 +80,7 @@ func serve(bs model.Batches, ms model.Methods) error {
 				return t.Format("2006-01-02 15:04")
 			},
 			"until": func(t time.Time) string {
-				ret := time.Until(t)
-				if ret > 2*time.Hour {
-					ret -= ret % time.Hour
-				} else if ret > 2*time.Minute {
-					ret -= ret % time.Minute
-				} else {
-					ret -= ret % time.Second
-				}
-				return strings.Replace(strings.Replace(ret.String(), "0s", "", 1), "0m", "", 1)
+				return model.DurationToString(time.Until(t))
 			}}).ParseFiles("tmpl/batches.html")
 		if err != nil {
 			fmt.Println(err)

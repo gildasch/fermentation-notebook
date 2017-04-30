@@ -41,13 +41,16 @@ func DurationToString(d time.Duration) string {
 
 	// Split days and rest
 	days := int64(d) / (24 * int64(time.Hour))
-	daysStr := strconv.FormatInt(days, 10)
+	daysStr := ""
+	if days > 0 {
+		daysStr = strconv.FormatInt(days, 10) + "d"
+	}
 
 	rest := d % (24 * time.Hour)
 	// Crop after second
 	rest = rest - (rest % time.Second)
 
-	ret := sign + daysStr + "d" + rest.String()
+	ret := sign + daysStr + rest.String()
 
 	// Remove zeros
 	re := regexp.MustCompile("([^0-9])0[dhms]")
