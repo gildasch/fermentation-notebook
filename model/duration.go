@@ -14,14 +14,17 @@ func ParseDuration(s string) (time.Duration, error) {
 
 	var ret time.Duration
 	dayAndRest := strings.Split(s, "d")
-	nDay, err := strconv.Atoi(dayAndRest[0])
-	if err != nil {
-		return ret, err
-	}
-	d, err := time.ParseDuration(dayAndRest[1])
+	nDay, err := strconv.ParseFloat(dayAndRest[0], 64)
 	if err != nil {
 		return ret, err
 	}
 
-	return d + time.Duration(24*nDay)*time.Hour, nil
+	if dayAndRest[1] != "" {
+		ret, err = time.ParseDuration(dayAndRest[1])
+		if err != nil {
+			return ret, err
+		}
+	}
+
+	return ret + time.Duration(24*nDay)*time.Hour, nil
 }
