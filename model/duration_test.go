@@ -42,3 +42,12 @@ func TestParseDurationWithDays(t *testing.T) {
 		assert.Equal(t, expected, actual)
 	}
 }
+
+func TestDurationToString(t *testing.T) {
+	expected := "2d12h5m"
+	d, err := ParseDuration(expected)
+	assert.Nil(t, err)
+	actual := DurationToString(d)
+
+	assert.Equal(t, expected, actual)
+}
