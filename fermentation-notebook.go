@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/gildasch/fermentation-notebook/model"
+	"github.com/gildasch/fermentation-notebook/batches"
 	"github.com/gildasch/fermentation-notebook/utils/durations"
 	"github.com/gorilla/mux"
 )
@@ -30,7 +30,7 @@ func main() {
 	fmt.Println(err)
 }
 
-func readBatches(input string) (bs model.Batches, err error) {
+func readBatches(input string) (bs batches.Batches, err error) {
 	bf, err := os.Open(input)
 	if err != nil {
 		return
@@ -40,14 +40,14 @@ func readBatches(input string) (bs model.Batches, err error) {
 		return
 	}
 
-	bs, err = model.ParseBatches(bb)
+	bs, err = batches.ParseBatches(bb)
 	if err != nil {
 		return
 	}
 	return
 }
 
-func serve(bs model.Batches) error {
+func serve(bs batches.Batches) error {
 	batchesHandler := func(w http.ResponseWriter, r *http.Request) {
 		t, err := template.New("batches.html").Funcs(template.FuncMap{
 			"nl2br": func(s string) template.HTML {
@@ -63,7 +63,7 @@ func serve(bs model.Batches) error {
 			fmt.Println(err)
 		}
 		err = t.Execute(w, struct {
-			model.Batches
+			batches.Batches
 		}{bs})
 		if err != nil {
 			fmt.Println(err)
