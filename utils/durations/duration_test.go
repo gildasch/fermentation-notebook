@@ -1,4 +1,4 @@
-package model
+package durations
 
 import (
 	"math/rand"

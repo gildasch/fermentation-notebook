@@ -4,6 +4,7 @@ import (
 	"errors"
 	"time"
 
+	"github.com/gildasch/fermentation-notebook/utils/durations"
 	yaml "gopkg.in/yaml.v2"
 )
 
@@ -36,7 +37,7 @@ func ParseMethods(input []byte) (ms Methods, err error) {
 			}
 			// Only the first
 			if _, ok := m.Durations[s.Name]; !ok {
-				m.Durations[s.Name], err = ParseDuration(s.Duration)
+				m.Durations[s.Name], err = durations.ParseDuration(s.Duration)
 				if err != nil {
 					err = errors.New("Error parsing duration <" + s.Duration + ">: " + err.Error())
 					return

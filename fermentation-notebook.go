@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/gildasch/fermentation-notebook/model"
+	"github.com/gildasch/fermentation-notebook/utils/durations"
 	"github.com/gorilla/mux"
 )
 
@@ -79,7 +80,7 @@ func serve(bs model.Batches, ms model.Methods) error {
 				return t.Format("2006-01-02 15:04")
 			},
 			"until": func(t time.Time) string {
-				return model.DurationToString(time.Until(t))
+				return durations.DurationToString(time.Until(t))
 			}}).ParseFiles("tmpl/batches.html")
 		if err != nil {
 			fmt.Println(err)
