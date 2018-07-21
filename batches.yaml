@@ -1,4 +1,45 @@
-batches:
+current:
+  - name: 'Hydromel #1'
+    type: Hydromel
+    log:
+      - name: Initial
+        date: 2018-07-21 12:00
+        ingredients:
+          - type: Eau
+            quantity: 700g
+            brand: Cristaline
+          - type: Miel
+            quantity: 175g
+            brand: Rucher du Morvan Fleurs Sauvages
+          - type: Myrtilles
+            quantity: 80g
+            brand: Biocoop
+  - name: 'Hydromel #2'
+    type: Hydromel
+    log:
+      - name: Initial
+        date: 2018-07-21 12:02
+        ingredients:
+          - type: Eau
+            quantity: 700g
+            brand: Cristaline
+          - type: Miel
+            quantity: 175g
+            brand: Rucher du Morvan Fleurs Sauvages
+        notes: pas beaucoup de place dans le haut du bocal...
+  - name: 'Hydromel #3'
+    type: Hydromel
+    log:
+      - name: Initial
+        date: 2018-07-21 12:10
+        ingredients:
+          - type: Eau
+            quantity: 1600g
+            brand: Cristaline
+          - type: Miel
+            quantity: 400g
+            brand: Miel de mon enfance, Fleurs de Champagne, Renois Apiculteurs
+past:
   - name: L1
     type: Levain solide
     log:

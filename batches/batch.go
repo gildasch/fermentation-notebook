@@ -5,7 +5,8 @@ import (
 )
 
 type Batches struct {
-	Batches []*Batch
+	Current []*Batch
+	Past    []*Batch
 }
 
 type Batch struct {

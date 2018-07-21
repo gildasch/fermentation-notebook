@@ -8,15 +8,40 @@
   </head>
   <body>
     <h1>Fermentation Notebook</h1>
-    <h2>Batches</h3>
-    {{ range $b := .Batches.Batches }}
+    <h2>Batches</h2>
+    {{ range $b := .Batches.Current }}
     <p>
       <h3>{{ $b.Name }}: {{ $b.Type }}</h3>
       <ul>
-        {{ range $e := $b.Log }}
+        {{ range $l := $b.Log }}
         <li>
-          {{ $e.Date }}, {{ $e.Name }}
-          <p>{{ nl2br $e.Notes }}</p>
+          <p>{{ $l.Date }}, {{ $l.Name }}</p>
+          <ul>
+            {{ range $i := $l.Ingredients }}
+            <li>{{ $i.Type }} ({{ $i.Brand }}): {{ $i.Quantity }}</li>
+            {{ end }}
+          </ul>
+          <p>{{ nl2br $l.Notes }}</p>
+        </li>
+        {{ end }}
+      </ul>
+    </p>
+    {{ end }}
+
+    <h2>Past batches</h2>
+    {{ range $b := .Batches.Past }}
+    <p>
+      <h3>{{ $b.Name }}: {{ $b.Type }}</h3>
+      <ul>
+        {{ range $l := $b.Log }}
+        <li>
+          <p>{{ $l.Date }}, {{ $l.Name }}</p>
+          <ul>
+            {{ range $i := $l.Ingredients }}
+            <li>{{ $i.Type }} ({{ $i.Brand }}): {{ $i.Quantity }}</li>
+            {{ end }}
+          </ul>
+          <p>{{ nl2br $l.Notes }}</p>
         </li>
         {{ end }}
       </ul>
