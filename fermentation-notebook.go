@@ -7,10 +7,8 @@ import (
 	"net/http"
 	"os"
 	"strings"
-	"time"
 
 	"github.com/gildasch/fermentation-notebook/batches"
-	"github.com/gildasch/fermentation-notebook/utils/durations"
 	"github.com/gorilla/mux"
 )
 
@@ -52,12 +50,6 @@ func serve(bs batches.Batches) error {
 		t, err := template.New("batches.html").Funcs(template.FuncMap{
 			"nl2br": func(s string) template.HTML {
 				return template.HTML(strings.Replace(s, "\n", "<br />\n", -1))
-			},
-			"date": func(t time.Time) string {
-				return t.Format("2006-01-02 15:04")
-			},
-			"until": func(t time.Time) string {
-				return durations.DurationToString(time.Until(t))
 			}}).ParseFiles("tmpl/batches.html")
 		if err != nil {
 			fmt.Println(err)
