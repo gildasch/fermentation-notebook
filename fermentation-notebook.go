@@ -69,7 +69,11 @@ func serve(bs batches.Batches) error {
 	r.PathPrefix("/").Handler(http.FileServer(http.Dir("./static/")))
 
 	http.Handle("/", r)
-	port := "8080"
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+
 	fmt.Printf("Listening on %s...\n", port)
 	return http.ListenAndServe(":"+port, nil)
 }
