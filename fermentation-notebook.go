@@ -9,9 +9,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/gildasch/fermentation-notebook/model"
 	"github.com/gorilla/mux"
-
-	"github.com/GildasCh/fermentation-notebook/model"
 )
 
 func main() {
