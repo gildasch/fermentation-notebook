@@ -7,6 +7,7 @@
     <title>Batches</title>
   </head>
   <body>
+    <img id="logo" src='icons/{{ .Icon }}.svg' />
     <h1>Fermentation Notebook</h1>
     <h2>Batches</h2>
     {{ range $b := .Batches.Current }}
@@ -47,6 +48,8 @@
       </ul>
     </p>
     {{ end }}
+
+    <p class='icon-license'>icon designed by Freepik from Flaticon</p>
   </body>
 </html>
 

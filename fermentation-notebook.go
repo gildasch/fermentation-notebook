@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"html/template"
 	"io/ioutil"
+	"math/rand"
 	"net/http"
 	"os"
 	"strings"
@@ -56,7 +57,8 @@ func serve(bs batches.Batches) error {
 		}
 		err = t.Execute(w, struct {
 			batches.Batches
-		}{bs})
+			Icon string
+		}{bs, randomIcon()})
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -70,4 +72,22 @@ func serve(bs batches.Batches) error {
 	port := "8080"
 	fmt.Printf("Listening on %s...\n", port)
 	return http.ListenAndServe(":"+port, nil)
+}
+
+var icons = []string{
+	"003-corn",
+	"013-horseradish",
+	"028-radishes",
+	"033-raspberry",
+	"042-cabbage",
+	"048-pineapple",
+	"007-ginger",
+	"025-grapes",
+	"030-cabbage-1",
+	"034-blueberries",
+	"043-lemon",
+}
+
+func randomIcon() string {
+	return icons[rand.Intn(len(icons))]
 }
