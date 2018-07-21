@@ -1,7 +1,0 @@
-methods:
-  Levain solide:
-    steps:
-      - name: Création
-      - name: Levage
-        duration: 96h
-      - name: Rafraichi

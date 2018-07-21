@@ -15,45 +15,22 @@ import (
 )
 
 func main() {
-	if len(os.Args) < 3 {
-		fmt.Println("Usage:", os.Args[0], "path/to/batches.yaml", "path/to/methods.yaml")
+	if len(os.Args) < 2 {
+		fmt.Println("Usage:", os.Args[0], "path/to/batches.yaml")
 		return
 	}
 
-	ms, err := readMethods(os.Args[2])
-	if err != nil {
-		fmt.Println("Error reading methods:", err)
-		return
-	}
-
-	bs, err := readBatches(os.Args[1], ms)
+	bs, err := readBatches(os.Args[1])
 	if err != nil {
 		fmt.Println("Error reading batches:", err)
 		return
 	}
 
-	err = serve(bs, ms)
+	err = serve(bs)
 	fmt.Println(err)
 }
 
-func readMethods(input string) (ms model.Methods, err error) {
-	mf, err := os.Open(input)
-	if err != nil {
-		return
-	}
-	mb, err := ioutil.ReadAll(mf)
-	if err != nil {
-		return
-	}
-
-	ms, err = model.ParseMethods(mb)
-	if err != nil {
-		return
-	}
-	return
-}
-
-func readBatches(input string, ms model.Methods) (bs model.Batches, err error) {
+func readBatches(input string) (bs model.Batches, err error) {
 	bf, err := os.Open(input)
 	if err != nil {
 		return
@@ -63,14 +40,14 @@ func readBatches(input string, ms model.Methods) (bs model.Batches, err error) {
 		return
 	}
 
-	bs, err = model.ParseBatches(bb, ms)
+	bs, err = model.ParseBatches(bb)
 	if err != nil {
 		return
 	}
 	return
 }
 
-func serve(bs model.Batches, ms model.Methods) error {
+func serve(bs model.Batches) error {
 	batchesHandler := func(w http.ResponseWriter, r *http.Request) {
 		t, err := template.New("batches.html").Funcs(template.FuncMap{
 			"nl2br": func(s string) template.HTML {
@@ -87,8 +64,7 @@ func serve(bs model.Batches, ms model.Methods) error {
 		}
 		err = t.Execute(w, struct {
 			model.Batches
-			model.Methods
-		}{bs, ms})
+		}{bs})
 		if err != nil {
 			fmt.Println(err)
 		}

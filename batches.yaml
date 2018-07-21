@@ -1,10 +1,10 @@
 batches:
   - name: L1
     type: Levain solide
-    history:
+    log:
       - name: Création
         date: 2017-04-17 16:00
-        comment: |
+        notes: |
           300g farine, T65 à la meule de pierre, bio
           150g eau cristaline, 50% temp. ambiante, 50% 65 deg.
           15g miel, non bio
